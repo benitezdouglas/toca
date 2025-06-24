@@ -21,7 +21,7 @@ export class ArtistService {
       data,
       include: {
         Person: true, // Include related Person data if needed
-        genres: true, // Include related genres if needed
+        // artistGenres: true, // Include related artistGenres if needed
       },
     });
   }

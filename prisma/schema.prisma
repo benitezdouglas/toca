@@ -77,9 +77,9 @@ model Artist {
   website   String?     @db.VarChar(255) @unique
   discord   String?     @db.VarChar(100) @unique
   // Relations
-  Person    Person?         @relation("Person", fields: [PersonId], references: [id])
-  artistGenres ArtistGenre[] @relation("ArtistGenre")
-  canPlay   CanPlayArtist[] @relation("CanPlayArtist")
+  Person        Person?         @relation("Person", fields: [PersonId], references: [id])
+  artistGenres  ArtistGenre[] @relation("ArtistGenre")
+  canPlay       CanPlayArtist[] @relation("CanPlayArtist")
   // Timestamps
   createdAt DateTime    @default(now()) @map("created_at")
   updatedAt DateTime    @updatedAt @map("updated_at")
