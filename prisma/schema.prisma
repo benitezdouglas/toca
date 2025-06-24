@@ -15,44 +15,91 @@ datasource db {
 }
 
 model Person {
-  id        Int     @default(autoincrement()) @id
-  email     String  @db.VarChar(100) @unique
+  id        Int      @default(autoincrement()) @id
+  email     String   @db.VarChar(100) @unique
   name      String
   password  String
-  artist    Artist? @relation("Person")
+  artist    Artist?  @relation("Person")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+model Genre {
+  id        Int      @default(autoincrement()) @id
+  artistGenreId Int? @map("artist_genre_id")
+  // Fields
+  name      String    @db.VarChar(100) @unique
+  description String? @db.Text
+  image     String?   @db.VarChar(255)
+  isActive  Boolean   @default(true) @map("is_active")
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  isFeatured Boolean  @default(false) @map("is_featured")
+  // Relations
+  canPlayArtists CanPlayArtist[] @relation("Genre")
+  artistGenres   ArtistGenre[]   @relation("Genre")
+  // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 }
 
 model ArtistGenre {
   id        Int      @default(autoincrement()) @id
-  name      String   @db.VarChar(100) @unique
+  ArtistId  Int      @map("artist_id")
+  GenreId   Int      @map("genre_id")
+  // Relations
+  Artist    Artist   @relation("ArtistGenre", fields: [ArtistId], references: [id])
+  Genre     Genre    @relation("Genre", fields: [GenreId], references: [id])
+  // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  artists   Artist[] @relation("ArtistGenres")
 }
 
 model Artist {
-  id        Int          @default(autoincrement()) @id
-  PersonId Int           @unique @map("person_id")
+  id        Int         @default(autoincrement()) @id
+  PersonId  Int?        @unique @map("person_id")
+  GenreId  Int?         @map("genre_id")
+  ArtistGenreId Int?    @map("artist_genre_id")
   about     String?     @db.Text
   image     String?     @db.VarChar(255)
   isVerified Boolean    @default(false) @map("is_verified")
   isActive  Boolean     @default(true) @map("is_active")
   isDeleted Boolean     @default(false) @map("is_deleted")
+  isFeatured Boolean    @default(false) @map("is_featured")
   instagram String?     @db.VarChar(100) @unique
   facebook  String?     @db.VarChar(100) @unique
   twitter   String?     @db.VarChar(100) @unique
   youtube   String?     @db.VarChar(100) @unique
   tiktok    String?     @db.VarChar(100) @unique
   spotify   String?     @db.VarChar(100) @unique
-  soundcloud String?   @db.VarChar(100) @unique
-  appleMusic String?   @db.VarChar(100) @unique
+  soundcloud String?    @db.VarChar(100) @unique
+  appleMusic String?    @db.VarChar(100) @unique
   bandcamp  String?     @db.VarChar(100) @unique
   website   String?     @db.VarChar(255) @unique
   discord   String?     @db.VarChar(100) @unique
-  Person    Person?      @relation("Person", fields: [PersonId], references: [id])
-  genres    ArtistGenre[] @relation("ArtistGenres")
-  createdAt DateTime     @default(now()) @map("created_at")
-  updatedAt DateTime     @updatedAt @map("updated_at")
+  // Relations
+  Person    Person?         @relation("Person", fields: [PersonId], references: [id])
+  artistGenres ArtistGenre[] @relation("ArtistGenre")
+  canPlay   CanPlayArtist[] @relation("CanPlayArtist")
+  // Timestamps
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+}
+
+model CanPlayArtist {
+  id        Int      @default(autoincrement()) @id
+  ArtistId  Int      @map("artist_id")
+  genreId   Int?     @map("genre_id")
+  // Fields
+  Name      String   @db.VarChar(100)
+  Description String? @db.Text
+  Image     String?  @db.VarChar(255)
+  Link      String?  @db.VarChar(255)
+  isActive  Boolean  @default(true) @map("is_active")
+  isDeleted Boolean  @default(false) @map("is_deleted")
+  // Relations
+  Artist    Artist   @relation("CanPlayArtist", fields: [ArtistId], references: [id])
+  genre     Genre?   @relation("Genre", fields: [genreId], references: [id])
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 }
