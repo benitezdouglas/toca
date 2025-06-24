@@ -34,10 +34,10 @@ model ArtistGenre {
 
 model Artist {
   id        Int          @default(autoincrement()) @id
-  PersonId Int?        @unique @map("person_id")
+  PersonId Int           @unique @map("person_id")
   about     String?     @db.Text
   image     String?     @db.VarChar(255)
-  isVerified Boolean     @default(false) @map("is_verified")
+  isVerified Boolean    @default(false) @map("is_verified")
   isActive  Boolean     @default(true) @map("is_active")
   isDeleted Boolean     @default(false) @map("is_deleted")
   instagram String?     @db.VarChar(100) @unique
@@ -51,7 +51,7 @@ model Artist {
   bandcamp  String?     @db.VarChar(100) @unique
   website   String?     @db.VarChar(255) @unique
   discord   String?     @db.VarChar(100) @unique
-  Person    Person?     @relation("Person", fields: [PersonId], references: [id])
+  Person    Person?      @relation("Person", fields: [PersonId], references: [id])
   genres    ArtistGenre[] @relation("ArtistGenres")
   createdAt DateTime     @default(now()) @map("created_at")
   updatedAt DateTime     @updatedAt @map("updated_at")
