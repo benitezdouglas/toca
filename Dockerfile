@@ -6,6 +6,8 @@ WORKDIR /home/node/app
 
 COPY package.json ./
 
+COPY prisma ./prisma/
+
 USER node
 
 RUN npm install
