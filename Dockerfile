@@ -10,10 +10,10 @@ USER node
 
 RUN npm install
 
+RUN npm run generate
+
 COPY --chown=node:node . .
 
 EXPOSE 3000
-
-CMD [ "npm", "run", "generate" ]
 
 CMD [ "npm", "start" ]
