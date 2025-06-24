@@ -9,11 +9,28 @@ export class ArtistService {
   async getArtistById(id: number) {
     return this.prisma.artist.findUnique({
       where: { id },
+      include: {
+        Person: true, // Include related Person data if needed
+        artistGenres: {
+          include: {
+            Genre: true, // Include related Genre data if needed
+          },
+        }, // Include related genres if needed
+      },
     });
   }
 
   async getAllArtists() {
-    return this.prisma.artist.findMany();
+    return this.prisma.artist.findMany({
+      include: {
+        Person: true, // Include related Person data if needed
+        artistGenres: {
+          include: {
+            Genre: true, // Include related Genre data if needed
+          },
+        }, // Include related genres if needed
+      },
+    });
   }
 
   async createArtist(data: Prisma.ArtistCreateInput) {
@@ -21,7 +38,11 @@ export class ArtistService {
       data,
       include: {
         Person: true, // Include related Person data if needed
-        // artistGenres: true, // Include related artistGenres if needed
+        artistGenres: {
+          include: {
+            Genre: true, // Include related Genre data if needed
+          },
+        }, // Include related genres if needed
       },
     });
   }
